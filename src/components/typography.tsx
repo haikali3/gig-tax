@@ -2,8 +2,8 @@ import React from 'react'
 import type { JSX } from 'react'
 import clsx from 'clsx'
 
-// Strictly define allowed variants
-const TYPOGRAPHY_VARIANTS = [
+// Define allowed tags and fonts
+const TAGS = [
   'h1',
   'h2',
   'h3',
@@ -17,37 +17,42 @@ const TYPOGRAPHY_VARIANTS = [
   'inlineCode',
   'list',
 ] as const
+const FONTS = ['satoshi', 'instrument-serif'] as const
 
-type TypographyVariant = (typeof TYPOGRAPHY_VARIANTS)[number]
+type Tag = (typeof TAGS)[number]
+type Font = (typeof FONTS)[number]
+
+type TypographyVariant = Tag | `${Tag}-${Font}`
 
 interface TypographyProps extends React.HTMLAttributes<HTMLElement> {
-  variant: TypographyVariant
+  variant: Tag // Only the tag, e.g. 'h1', 'lead', etc.
+  fontClass?: 'satoshi' | 'instrument-serif'
   children: React.ReactNode
 }
 
 export const Typography: React.FC<TypographyProps> = ({
   variant,
+  fontClass = 'satoshi',
   children,
   className,
   ...props
 }) => {
-  if (!variant) {
-    throw new Error("Typography component requires a 'variant' prop")
-  }
-
-  if (!TYPOGRAPHY_VARIANTS.includes(variant)) {
+  if (!TAGS.includes(variant as Tag)) {
     throw new Error(
-      `Invalid variant '${variant}'. Must be one of: ${TYPOGRAPHY_VARIANTS.join(', ')}`,
+      `Invalid tag '${variant}'. Must be one of: ${TAGS.join(', ')}`,
     )
   }
 
-  const baseClass = 'font-satoshi text-gray-800'
+  const fontClassName =
+    fontClass === 'instrument-serif' ? 'font-instrument-serif' : 'font-satoshi'
 
-  const variantClasses: Record<TypographyVariant, string> = {
-    h1: 'text-4xl md:text-5xl font-bold',
-    h2: 'text-3xl md:text-4xl font-semibold',
-    h3: 'text-2xl md:text-3xl font-semibold',
-    h4: 'text-xl md:text-2xl font-medium',
+  const baseClass = 'text-gray-800'
+
+  const tagClasses: Record<Tag, string> = {
+    h1: 'text-4xl md:text-5xl tracking-tight',
+    h2: 'text-3xl md:text-4xl tracking-tight',
+    h3: 'text-2xl md:text-3xl tracking-tight',
+    h4: 'text-xl md:text-2xl tracking-tight',
     p: 'text-base',
     lead: 'text-xl text-gray-700',
     large: 'text-lg font-semibold',
@@ -59,7 +64,7 @@ export const Typography: React.FC<TypographyProps> = ({
     list: 'list-disc list-inside text-base text-gray-800',
   }
 
-  const variantToTag: Record<TypographyVariant, keyof JSX.IntrinsicElements> = {
+  const tagToElement: Record<Tag, keyof JSX.IntrinsicElements> = {
     h1: 'h1',
     h2: 'h2',
     h3: 'h3',
@@ -74,11 +79,16 @@ export const Typography: React.FC<TypographyProps> = ({
     list: 'ul',
   }
 
-  const TagComponent = variantToTag[variant] as React.ElementType
+  const TagComponent = tagToElement[variant as Tag] as React.ElementType
 
   return (
     <TagComponent
-      className={clsx(baseClass, variantClasses[variant], className)}
+      className={clsx(
+        baseClass,
+        fontClassName,
+        tagClasses[variant as Tag],
+        className,
+      )}
       {...props}
     >
       {children}
