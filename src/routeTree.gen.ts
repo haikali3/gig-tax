@@ -11,20 +11,13 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as ExpensesImport } from './routes/expenses'
 import { Route as IndexImport } from './routes/index'
 import { Route as ReportsIndexImport } from './routes/reports/index'
 import { Route as ExpensesIndexImport } from './routes/expenses/index'
 import { Route as DashboardIndexImport } from './routes/dashboard/index'
-import { Route as ExpensesAddIndexImport } from './routes/expenses/add/index'
+import { Route as ExpensesAddExpensesIndexImport } from './routes/expenses/add-expenses/index'
 
 // Create/Update Routes
-
-const ExpensesRoute = ExpensesImport.update({
-  id: '/expenses',
-  path: '/expenses',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -39,9 +32,9 @@ const ReportsIndexRoute = ReportsIndexImport.update({
 } as any)
 
 const ExpensesIndexRoute = ExpensesIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => ExpensesRoute,
+  id: '/expenses/',
+  path: '/expenses/',
+  getParentRoute: () => rootRoute,
 } as any)
 
 const DashboardIndexRoute = DashboardIndexImport.update({
@@ -50,10 +43,10 @@ const DashboardIndexRoute = DashboardIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ExpensesAddIndexRoute = ExpensesAddIndexImport.update({
-  id: '/add/',
-  path: '/add/',
-  getParentRoute: () => ExpensesRoute,
+const ExpensesAddExpensesIndexRoute = ExpensesAddExpensesIndexImport.update({
+  id: '/expenses/add-expenses/',
+  path: '/expenses/add-expenses/',
+  getParentRoute: () => rootRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -67,13 +60,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/expenses': {
-      id: '/expenses'
-      path: '/expenses'
-      fullPath: '/expenses'
-      preLoaderRoute: typeof ExpensesImport
-      parentRoute: typeof rootRoute
-    }
     '/dashboard/': {
       id: '/dashboard/'
       path: '/dashboard'
@@ -83,10 +69,10 @@ declare module '@tanstack/react-router' {
     }
     '/expenses/': {
       id: '/expenses/'
-      path: '/'
-      fullPath: '/expenses/'
+      path: '/expenses'
+      fullPath: '/expenses'
       preLoaderRoute: typeof ExpensesIndexImport
-      parentRoute: typeof ExpensesImport
+      parentRoute: typeof rootRoute
     }
     '/reports/': {
       id: '/reports/'
@@ -95,39 +81,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportsIndexImport
       parentRoute: typeof rootRoute
     }
-    '/expenses/add/': {
-      id: '/expenses/add/'
-      path: '/add'
-      fullPath: '/expenses/add'
-      preLoaderRoute: typeof ExpensesAddIndexImport
-      parentRoute: typeof ExpensesImport
+    '/expenses/add-expenses/': {
+      id: '/expenses/add-expenses/'
+      path: '/expenses/add-expenses'
+      fullPath: '/expenses/add-expenses'
+      preLoaderRoute: typeof ExpensesAddExpensesIndexImport
+      parentRoute: typeof rootRoute
     }
   }
 }
 
 // Create and export the route tree
 
-interface ExpensesRouteChildren {
-  ExpensesIndexRoute: typeof ExpensesIndexRoute
-  ExpensesAddIndexRoute: typeof ExpensesAddIndexRoute
-}
-
-const ExpensesRouteChildren: ExpensesRouteChildren = {
-  ExpensesIndexRoute: ExpensesIndexRoute,
-  ExpensesAddIndexRoute: ExpensesAddIndexRoute,
-}
-
-const ExpensesRouteWithChildren = ExpensesRoute._addFileChildren(
-  ExpensesRouteChildren,
-)
-
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/expenses': typeof ExpensesRouteWithChildren
   '/dashboard': typeof DashboardIndexRoute
-  '/expenses/': typeof ExpensesIndexRoute
+  '/expenses': typeof ExpensesIndexRoute
   '/reports': typeof ReportsIndexRoute
-  '/expenses/add': typeof ExpensesAddIndexRoute
+  '/expenses/add-expenses': typeof ExpensesAddExpensesIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -135,53 +106,52 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardIndexRoute
   '/expenses': typeof ExpensesIndexRoute
   '/reports': typeof ReportsIndexRoute
-  '/expenses/add': typeof ExpensesAddIndexRoute
+  '/expenses/add-expenses': typeof ExpensesAddExpensesIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/expenses': typeof ExpensesRouteWithChildren
   '/dashboard/': typeof DashboardIndexRoute
   '/expenses/': typeof ExpensesIndexRoute
   '/reports/': typeof ReportsIndexRoute
-  '/expenses/add/': typeof ExpensesAddIndexRoute
+  '/expenses/add-expenses/': typeof ExpensesAddExpensesIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/expenses'
     | '/dashboard'
-    | '/expenses/'
+    | '/expenses'
     | '/reports'
-    | '/expenses/add'
+    | '/expenses/add-expenses'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/expenses' | '/reports' | '/expenses/add'
+  to: '/' | '/dashboard' | '/expenses' | '/reports' | '/expenses/add-expenses'
   id:
     | '__root__'
     | '/'
-    | '/expenses'
     | '/dashboard/'
     | '/expenses/'
     | '/reports/'
-    | '/expenses/add/'
+    | '/expenses/add-expenses/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ExpensesRoute: typeof ExpensesRouteWithChildren
   DashboardIndexRoute: typeof DashboardIndexRoute
+  ExpensesIndexRoute: typeof ExpensesIndexRoute
   ReportsIndexRoute: typeof ReportsIndexRoute
+  ExpensesAddExpensesIndexRoute: typeof ExpensesAddExpensesIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ExpensesRoute: ExpensesRouteWithChildren,
   DashboardIndexRoute: DashboardIndexRoute,
+  ExpensesIndexRoute: ExpensesIndexRoute,
   ReportsIndexRoute: ReportsIndexRoute,
+  ExpensesAddExpensesIndexRoute: ExpensesAddExpensesIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -195,34 +165,26 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/expenses",
         "/dashboard/",
-        "/reports/"
+        "/expenses/",
+        "/reports/",
+        "/expenses/add-expenses/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/expenses": {
-      "filePath": "expenses.tsx",
-      "children": [
-        "/expenses/",
-        "/expenses/add/"
-      ]
-    },
     "/dashboard/": {
       "filePath": "dashboard/index.tsx"
     },
     "/expenses/": {
-      "filePath": "expenses/index.tsx",
-      "parent": "/expenses"
+      "filePath": "expenses/index.tsx"
     },
     "/reports/": {
       "filePath": "reports/index.tsx"
     },
-    "/expenses/add/": {
-      "filePath": "expenses/add/index.tsx",
-      "parent": "/expenses"
+    "/expenses/add-expenses/": {
+      "filePath": "expenses/add-expenses/index.tsx"
     }
   }
 }

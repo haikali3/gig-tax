@@ -192,7 +192,7 @@ const Expenses = () => {
             <Download className="h-4 w-4 mr-2" />
             Export
           </Button>
-          <Link to="/expenses/add">
+          <Link to="/expenses/add-expenses">
             <Button>
               <Upload className="h-4 w-4 mr-2" />
               Add Expense

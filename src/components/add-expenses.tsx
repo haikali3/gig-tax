@@ -1,288 +1,322 @@
 import { useState } from 'react'
+import { useNavigate } from '@tanstack/react-router'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Button } from '@/components/ui/button'
-import { ArrowRight, Upload, Calendar, Download } from 'lucide-react'
-import { Link } from '@tanstack/react-router'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {
+  Calendar as CalendarIcon,
+  Receipt,
+  ArrowLeft,
+  Upload,
+  Camera,
+} from 'lucide-react'
+import { Calendar } from '@/components/ui/calendar'
+import { format } from 'date-fns'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { cn } from '@/lib/utils'
 import { useToast } from '@/hooks/use-toast'
 
-// Mock data for visualization
-const expensesByCategory = [
-  { category: 'Office Supplies', amount: 450.75, color: 'bg-brand-400' },
-  { category: 'Travel', amount: 1230.5, color: 'bg-blue-400' },
-  { category: 'Meals', amount: 375.25, color: 'bg-green-400' },
-  { category: 'Software', amount: 560.0, color: 'bg-yellow-400' },
-  { category: 'Other', amount: 290.5, color: 'bg-red-400' },
-]
-
-const recentExpenses = [
-  {
-    id: '1',
-    date: '2025-05-15',
-    merchant: 'Adobe',
-    category: 'Software',
-    amount: 52.99,
-  },
-  {
-    id: '2',
-    date: '2025-05-14',
-    merchant: 'Uber',
-    category: 'Travel',
-    amount: 24.5,
-  },
-  {
-    id: '3',
-    date: '2025-05-12',
-    merchant: 'Office Depot',
-    category: 'Office Supplies',
-    amount: 87.35,
-  },
-]
-
-const Dashboard = () => {
+const AddExpense = () => {
+  const navigate = useNavigate()
   const { toast } = useToast()
-  const [period, setPeriod] = useState('quarter')
+  const [date, setDate] = useState<Date | undefined>(new Date())
+  const [isDragging, setIsDragging] = useState(false)
+  const [receipt, setReceipt] = useState<File | null>(null)
 
-  const totalExpenses = expensesByCategory.reduce(
-    (acc, curr) => acc + curr.amount,
-    0,
-  )
-
-  // Calculate percentage for visualization
-  const getPercentage = (amount: number) => {
-    return (amount / totalExpenses) * 100
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    toast({
+      title: 'Expense Added',
+      description: 'Your expense has been successfully recorded.',
+    })
+    // In a real app, you would save to your data source
+    navigate({ to: '/expenses' })
   }
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    setIsDragging(true)
+  }
+
+  const handleDragLeave = () => {
+    setIsDragging(false)
+  }
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    setIsDragging(false)
+
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0]
+      setReceipt(file)
+      toast({
+        title: 'Receipt Uploaded',
+        description: `File "${file.name}" has been uploaded.`,
+      })
+    }
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0]
+      setReceipt(file)
+      toast({
+        title: 'Receipt Uploaded',
+        description: `File "${file.name}" has been uploaded.`,
+      })
+    }
+  }
+
+  const categoryOptions = [
+    'Advertising',
+    'Car & Truck Expenses',
+    'Commissions & Fees',
+    'Contract Labor',
+    'Home Office',
+    'Insurance',
+    'Meals',
+    'Office Supplies',
+    'Professional Services',
+    'Rent',
+    'Software & Subscriptions',
+    'Travel',
+    'Utilities',
+    'Other',
+  ]
 
   return (
     <div className="container mx-auto px-4 py-24">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+      <Button
+        variant="ghost"
+        onClick={() => navigate({ to: '/expenses' })}
+        className="mb-6"
+      >
+        <ArrowLeft className="h-4 w-4 mr-2" />
+        Back to Expenses
+      </Button>
+
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">Add Expense</h1>
+        <p className="text-gray-500 mt-1">Record a new business expense</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>Expense Details</CardTitle>
+              <CardDescription>
+                Enter the information about your expense
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="date">Date</Label>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="w-full justify-start text-left font-normal"
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {date ? (
+                              format(date, 'PPP')
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                          <Calendar
+                            mode="single"
+                            selected={date}
+                            onSelect={setDate}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="amount">Amount ($)</Label>
+                      <Input
+                        id="amount"
+                        placeholder="0.00"
+                        type="number"
+                        step="0.01"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="merchant">Merchant/Vendor</Label>
+                    <Input
+                      id="merchant"
+                      placeholder="Enter merchant name"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="category">Category</Label>
+                    <Select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categoryOptions.map((category) => (
+                          <SelectItem
+                            key={category}
+                            value={category.toLowerCase()}
+                          >
+                            {category}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="notes">Notes (optional)</Label>
+                    <Textarea
+                      id="notes"
+                      placeholder="Add any relevant details about this expense"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end space-x-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => navigate({ to: '/expenses' })}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit">Save Expense</Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-500 mt-1">
-            Track and manage your freelance expenses
-          </p>
-        </div>
-        <div className="mt-4 md:mt-0 space-x-2">
-          <Button
-            onClick={() => {
-              toast({
-                title: 'Coming Soon!',
-                description:
-                  'This feature will be available in a future update.',
-              })
-            }}
-            className="bg-white hover:bg-gray-50 text-gray-800 border border-gray-300"
-          >
-            <Calendar className="h-4 w-4 mr-2" />
-            May 2025
-          </Button>
-          <Link to="/expenses/add">
-            <Button>
-              <Upload className="h-4 w-4 mr-2" />
-              Add Expense
-            </Button>
-          </Link>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-medium text-gray-700">
-              Total Expenses
-            </CardTitle>
-            <CardDescription>Current quarter</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">
-              ${totalExpenses.toFixed(2)}
-            </div>
-          </CardContent>
-          <CardFooter className="pt-0 text-sm text-muted-foreground">
-            +12% from last quarter
-          </CardFooter>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-medium text-gray-700">
-              Potential Deductions
-            </CardTitle>
-            <CardDescription>Based on categorized expenses</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">
-              ${(totalExpenses * 0.8).toFixed(2)}
-            </div>
-          </CardContent>
-          <CardFooter className="pt-0 text-sm text-muted-foreground">
-            Approximately 80% of tracked expenses
-          </CardFooter>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-medium text-gray-700">
-              Uncategorized
-            </CardTitle>
-            <CardDescription>Expenses needing review</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">2 Items</div>
-          </CardContent>
-          <CardFooter className="pt-0">
-            <Link
-              to="/expenses?filter=uncategorized"
-              className="text-brand-500 hover:text-brand-600 text-sm flex items-center"
-            >
-              Review now <ArrowRight className="h-3 w-3 ml-1" />
-            </Link>
-          </CardFooter>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <div className="flex justify-between items-center">
-              <CardTitle>Expense Breakdown</CardTitle>
-              <Tabs
-                defaultValue="quarter"
-                value={period}
-                onValueChange={setPeriod}
-                className="w-[300px]"
-              >
-                <TabsList className="grid w-full grid-cols-3">
-                  <TabsTrigger value="month">Month</TabsTrigger>
-                  <TabsTrigger value="quarter">Quarter</TabsTrigger>
-                  <TabsTrigger value="year">Year</TabsTrigger>
+          <Card>
+            <CardHeader>
+              <CardTitle>Attach Receipt</CardTitle>
+              <CardDescription>
+                Upload a photo of your receipt for your records
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Tabs defaultValue="upload">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="upload">Upload</TabsTrigger>
+                  <TabsTrigger
+                    value="camera"
+                    onClick={() =>
+                      toast({
+                        title: 'Coming Soon!',
+                        description:
+                          'Camera capture will be available in a future update.',
+                      })
+                    }
+                  >
+                    Camera
+                  </TabsTrigger>
                 </TabsList>
+                <TabsContent value="upload" className="space-y-4">
+                  <div
+                    className={cn(
+                      'receipt-drop-area border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50',
+                      isDragging && 'active',
+                    )}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    onClick={() =>
+                      document.getElementById('receipt-upload')?.click()
+                    }
+                  >
+                    <input
+                      type="file"
+                      id="receipt-upload"
+                      className="hidden"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                    />
+                    <div className="flex flex-col items-center">
+                      <Receipt className="h-10 w-10 text-gray-400 mb-2" />
+                      <div className="text-sm font-medium">
+                        {receipt
+                          ? receipt.name
+                          : 'Drop receipt here or click to upload'}
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Supports JPG, PNG, PDF up to 10MB
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between text-sm text-gray-500">
+                    <div className="flex items-center">
+                      <Upload className="h-4 w-4 mr-1" />
+                      Drag and drop or click to upload
+                    </div>
+                  </div>
+                </TabsContent>
+                <TabsContent value="camera">
+                  <div className="flex flex-col items-center justify-center h-56 border rounded-lg bg-gray-50 text-center p-4">
+                    <Camera className="h-10 w-10 text-gray-400 mb-2" />
+                    <p className="font-medium text-gray-500">
+                      Camera capture coming soon
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      This feature will let you take pictures of receipts
+                      directly
+                    </p>
+                  </div>
+                </TabsContent>
               </Tabs>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {expensesByCategory.map((expense) => (
-                <div key={expense.category} className="space-y-1">
-                  <div className="flex justify-between text-sm">
-                    <span>{expense.category}</span>
-                    <span className="font-medium">
-                      ${expense.amount.toFixed(2)}
-                    </span>
-                  </div>
-                  <div className="w-full bg-gray-100 rounded-full h-2.5">
-                    <div
-                      className={`${expense.color} h-2.5 rounded-full`}
-                      style={{
-                        width: `${getPercentage(expense.amount)}%`,
-                      }}
-                    ></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 pt-4 border-t border-gray-100">
-              <div className="flex justify-between text-sm font-semibold">
-                <span>Total</span>
-                <span>${totalExpenses.toFixed(2)}</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Expenses</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {recentExpenses.map((expense) => (
-              <div
-                key={expense.id}
-                className="flex justify-between items-center p-3 rounded-lg hover:bg-gray-50"
-              >
-                <div>
-                  <p className="font-medium">{expense.merchant}</p>
-                  <p className="text-xs text-gray-500">
-                    {new Date(expense.date).toLocaleDateString()} Â·{' '}
-                    {expense.category}
-                  </p>
-                </div>
-                <div className="font-medium">${expense.amount.toFixed(2)}</div>
+              <div className="mt-6">
+                <h3 className="font-medium mb-2">Tips for better results</h3>
+                <ul className="text-sm text-gray-500 space-y-1">
+                  <li>• Make sure the receipt is on a flat surface</li>
+                  <li>• Ensure all text is visible and readable</li>
+                  <li>• Avoid shadows and glare on the receipt</li>
+                  <li>• Include the total amount and date</li>
+                </ul>
               </div>
-            ))}
-            <Button variant="outline" className="w-full mt-2" asChild>
-              <Link to="/expenses">View All Expenses</Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Button
-              variant="outline"
-              className="w-full justify-start"
-              onClick={() => {
-                toast({
-                  title: 'Coming Soon!',
-                  description:
-                    'This feature will be available in a future update.',
-                })
-              }}
-            >
-              <Upload className="mr-2 h-4 w-4" /> Scan Receipt
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full justify-start"
-              onClick={() => {
-                toast({
-                  title: 'Coming Soon!',
-                  description:
-                    'This feature will be available in a future update.',
-                })
-              }}
-            >
-              <Download className="mr-2 h-4 w-4" /> Export Quarterly Report
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Tax Calendar</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex justify-between items-center p-3 bg-brand-50 rounded-lg">
-              <div>
-                <p className="font-medium text-brand-700">
-                  Quarterly Estimated Tax
-                </p>
-                <p className="text-xs text-brand-500">Q2 Payment Due</p>
-              </div>
-              <div className="font-medium">Jun 15, 2025</div>
-            </div>
-            <div className="flex justify-between items-center p-3 rounded-lg">
-              <div>
-                <p className="font-medium">Q3 Payment Due</p>
-                <p className="text-xs text-gray-500">Estimated Tax</p>
-              </div>
-              <div className="font-medium">Sep 15, 2025</div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   )
 }
 
-export default Dashboard
+export default AddExpense
