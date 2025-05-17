@@ -8,7 +8,7 @@ export default function LandingPage() {
         {/* Autonomous tax & expense management badge */}
         <div className="flex items-center space-x-2 bg-white/80 border border-gray-200 rounded-full px-4 py-1 shadow-sm backdrop-blur z-10">
           <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-          <span className="text-xs font-medium text-gray-700">
+          <span className="text-sm font-medium text-gray-700">
             Autonomous tax & expense management
           </span>
         </div>
@@ -20,9 +20,9 @@ export default function LandingPage() {
             fontClass="instrument-serif"
             className="font-normal text-[64px] md:text-[96px] leading-none text-[#2d3342]"
           >
-            Effortless{' '}
-            <span className="italic text-gray-400 font-normal">taxes</span>,
-            more time for what you love
+            {' '}
+            Take control of your freelance taxes
+            <span className="text-shine italic"> effortlessly.</span>
           </Typography>
           <Typography variant="lead" fontClass="satoshi" className="mt-4">
             Say goodbye to spreadsheet chaos and lost receipts. Our platform

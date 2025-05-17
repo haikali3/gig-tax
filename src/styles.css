@@ -153,7 +153,7 @@ code {
   font-family: 'Instrument Serif', serif;
 }
 
-/* .instrument-serif-regular {
+.instrument-serif-regular {
   font-family: "Instrument Serif", serif;
   font-weight: 400;
   font-style: normal;
@@ -163,4 +163,30 @@ code {
   font-family: "Instrument Serif", serif;
   font-weight: 400;
   font-style: italic;
-} */
+}
+
+@keyframes textShine {
+    0% {
+        background-position: 100% 0%;
+    }
+    100% {
+        background-position: 0% 0%;
+    }
+}
+
+.text-shine {
+  background: linear-gradient(
+      to right,
+      #7953cd 20%,
+      #b6b6b6 30%,
+      #777777 70%,
+      #764ada 80%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-emphasis-color: transparent;
+  background-size: 500% auto;
+  animation: textShine 3s ease-in-out infinite alternate;
+}
+
