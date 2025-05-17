@@ -1,5 +1,7 @@
+import { Link } from '@tanstack/react-router'
 import { Container } from './container'
 import { Typography } from './typography'
+import { Button } from './ui/button'
 
 export default function LandingPage() {
   return (
@@ -22,7 +24,10 @@ export default function LandingPage() {
           >
             {' '}
             Take control of your freelance taxes
-            <span className="text-shine italic"> effortlessly.</span>
+            <span className="text-shine italic instrument-serif">
+              {' '}
+              effortlessly.
+            </span>
           </Typography>
           <Typography
             variant="lead"
@@ -35,18 +40,19 @@ export default function LandingPage() {
             you.
           </Typography>
           <div className="flex space-x-4 mb-12 mt-10">
-            <a
-              href="#get-started"
-              className="px-6 py-3 rounded-lg bg-black text-white font-semibold shadow hover:bg-gray-900 transition"
-            >
-              Start Tracking Free
-            </a>
-            <a
-              href="#get-demo"
-              className="px-6 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 font-semibold shadow hover:bg-gray-50 transition"
-            >
-              See How It Works
-            </a>
+            <Link to="/expenses/add-expenses">
+              <Button className="h-14 px-8 text-lg rounded-xl">
+                Start Tracking Free
+              </Button>
+            </Link>
+            <Link to="/expenses/add-expenses">
+              <Button
+                variant="outline"
+                className="h-14 px-8 text-lg rounded-xl"
+              >
+                See How It Works
+              </Button>
+            </Link>
           </div>
         </div>
 
