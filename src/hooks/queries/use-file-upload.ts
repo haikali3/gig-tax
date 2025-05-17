@@ -1,10 +1,27 @@
 import { useMutation } from '@tanstack/react-query'
 import { useToast } from '@/hooks/use-toast'
 
+interface ReceiptData {
+  name: string
+  date: string
+  description: string
+  total_amount: number
+  item: string
+  raw_response: {
+    name: string
+    date_of_transaction: string
+    description: string
+    item: string
+    total_amount: string
+  }
+  product: string | null
+  category: string | null
+}
+
 interface FileUploadResponse {
   // Add response type based on your API response
   success: boolean
-  data?: any
+  data?: ReceiptData
   error?: string
 }
 

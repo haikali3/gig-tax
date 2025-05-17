@@ -44,12 +44,14 @@ const AddExpense = () => {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [isDragging, setIsDragging] = useState(false)
   const [receipt, setReceipt] = useState<File | null>(null)
+  const [formData, setFormData] = useState({
+    merchant: '',
+    amount: '',
+    category: '',
+    notes: '',
+  })
 
-  const uploadMutation = useFileUpload()
-
-  const handleFileUpload = (file: File) => {
-    uploadMutation.mutate(file)
-  }
+  const { mutate: uploadFile, isPending } = useFileUpload()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -57,7 +59,6 @@ const AddExpense = () => {
       title: 'Expense Added',
       description: 'Your expense has been successfully recorded.',
     })
-    // In a real app, you would save to your data source
     navigate({ to: '/expenses' })
   }
 
@@ -77,6 +78,41 @@ const AddExpense = () => {
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       const file = e.dataTransfer.files[0]
       setReceipt(file)
+      uploadFile(file, {
+        onSuccess: (response) => {
+          console.log('Upload response:', response)
+          const data = response.data
+          if (data) {
+            // Update form with receipt data
+            setFormData((prev) => ({
+              ...prev,
+              merchant: data.name || '',
+              amount: data.total_amount?.toString() || '',
+              category: data.category || '',
+              notes: data.description || '',
+            }))
+
+            // Update date if available
+            if (data.date) {
+              const [year, month, day] = data.date.match(/.{1,2}/g) || []
+              if (year && month && day) {
+                setDate(
+                  new Date(
+                    2000 + parseInt(year),
+                    parseInt(month) - 1,
+                    parseInt(day),
+                  ),
+                )
+              }
+            }
+
+            toast({
+              title: 'Receipt Processed',
+              description: 'Form has been populated with receipt data.',
+            })
+          }
+        },
+      })
       toast({
         title: 'Receipt Uploaded',
         description: `File "${file.name}" has been uploaded.`,
@@ -88,6 +124,41 @@ const AddExpense = () => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0]
       setReceipt(file)
+      uploadFile(file, {
+        onSuccess: (response) => {
+          console.log('Upload response:', response)
+          const data = response.data
+          if (data) {
+            // Update form with receipt data
+            setFormData((prev) => ({
+              ...prev,
+              merchant: data.name || '',
+              amount: data.total_amount?.toString() || '',
+              category: data.category || '',
+              notes: data.description || '',
+            }))
+
+            // Update date if available
+            if (data.date) {
+              const [year, month, day] = data.date.match(/.{1,2}/g) || []
+              if (year && month && day) {
+                setDate(
+                  new Date(
+                    2000 + parseInt(year),
+                    parseInt(month) - 1,
+                    parseInt(day),
+                  ),
+                )
+              }
+            }
+
+            toast({
+              title: 'Receipt Processed',
+              description: 'Form has been populated with receipt data.',
+            })
+          }
+        },
+      })
       toast({
         title: 'Receipt Uploaded',
         description: `File "${file.name}" has been uploaded.`,
@@ -180,6 +251,13 @@ const AddExpense = () => {
                         type="number"
                         step="0.01"
                         required
+                        value={formData.amount}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            amount: e.target.value,
+                          }))
+                        }
                       />
                     </div>
                   </div>
@@ -190,12 +268,24 @@ const AddExpense = () => {
                       id="merchant"
                       placeholder="Enter merchant name"
                       required
+                      value={formData.merchant}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          merchant: e.target.value,
+                        }))
+                      }
                     />
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="category">Category</Label>
-                    <Select>
+                    <Select
+                      value={formData.category}
+                      onValueChange={(value) =>
+                        setFormData((prev) => ({ ...prev, category: value }))
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select a category" />
                       </SelectTrigger>
@@ -217,6 +307,13 @@ const AddExpense = () => {
                     <Textarea
                       id="notes"
                       placeholder="Add any relevant details about this expense"
+                      value={formData.notes}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          notes: e.target.value,
+                        }))
+                      }
                     />
                   </div>
                 </div>
@@ -268,6 +365,7 @@ const AddExpense = () => {
                     className={cn(
                       'receipt-drop-area border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50',
                       isDragging && 'active',
+                      isPending && 'opacity-50 cursor-not-allowed',
                     )}
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
@@ -281,19 +379,17 @@ const AddExpense = () => {
                       id="receipt-upload"
                       className="hidden"
                       accept="image/*"
-                      onChange={(e) => {
-                        handleFileChange(e)
-                        if (e.target.files && e.target.files[0]) {
-                          handleFileUpload(e.target.files[0])
-                        }
-                      }}
+                      onChange={handleFileChange}
+                      disabled={isPending}
                     />
                     <div className="flex flex-col items-center">
                       <Receipt className="h-10 w-10 text-gray-400 mb-2" />
                       <Typography variant="p" className="font-bold">
-                        {receipt
-                          ? receipt.name
-                          : 'Drop receipt here or click to upload'}
+                        {isPending
+                          ? 'Processing receipt...'
+                          : receipt
+                            ? receipt.name
+                            : 'Drop receipt here or click to upload'}
                       </Typography>
                       <Typography
                         variant="small"
