@@ -16,7 +16,7 @@ import { Route as IndexImport } from './routes/index'
 import { Route as ReportsIndexImport } from './routes/reports/index'
 import { Route as ExpensesIndexImport } from './routes/expenses/index'
 import { Route as DashboardIndexImport } from './routes/dashboard/index'
-import { Route as ExpensesExpensesImport } from './routes/expenses/$expenses'
+import { Route as ExpensesAddIndexImport } from './routes/expenses/add/index'
 
 // Create/Update Routes
 
@@ -50,9 +50,9 @@ const DashboardIndexRoute = DashboardIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ExpensesExpensesRoute = ExpensesExpensesImport.update({
-  id: '/$expenses',
-  path: '/$expenses',
+const ExpensesAddIndexRoute = ExpensesAddIndexImport.update({
+  id: '/add/',
+  path: '/add/',
   getParentRoute: () => ExpensesRoute,
 } as any)
 
@@ -73,13 +73,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/expenses'
       preLoaderRoute: typeof ExpensesImport
       parentRoute: typeof rootRoute
-    }
-    '/expenses/$expenses': {
-      id: '/expenses/$expenses'
-      path: '/$expenses'
-      fullPath: '/expenses/$expenses'
-      preLoaderRoute: typeof ExpensesExpensesImport
-      parentRoute: typeof ExpensesImport
     }
     '/dashboard/': {
       id: '/dashboard/'
@@ -102,19 +95,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportsIndexImport
       parentRoute: typeof rootRoute
     }
+    '/expenses/add/': {
+      id: '/expenses/add/'
+      path: '/add'
+      fullPath: '/expenses/add'
+      preLoaderRoute: typeof ExpensesAddIndexImport
+      parentRoute: typeof ExpensesImport
+    }
   }
 }
 
 // Create and export the route tree
 
 interface ExpensesRouteChildren {
-  ExpensesExpensesRoute: typeof ExpensesExpensesRoute
   ExpensesIndexRoute: typeof ExpensesIndexRoute
+  ExpensesAddIndexRoute: typeof ExpensesAddIndexRoute
 }
 
 const ExpensesRouteChildren: ExpensesRouteChildren = {
-  ExpensesExpensesRoute: ExpensesExpensesRoute,
   ExpensesIndexRoute: ExpensesIndexRoute,
+  ExpensesAddIndexRoute: ExpensesAddIndexRoute,
 }
 
 const ExpensesRouteWithChildren = ExpensesRoute._addFileChildren(
@@ -124,28 +124,28 @@ const ExpensesRouteWithChildren = ExpensesRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/expenses': typeof ExpensesRouteWithChildren
-  '/expenses/$expenses': typeof ExpensesExpensesRoute
   '/dashboard': typeof DashboardIndexRoute
   '/expenses/': typeof ExpensesIndexRoute
   '/reports': typeof ReportsIndexRoute
+  '/expenses/add': typeof ExpensesAddIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/expenses/$expenses': typeof ExpensesExpensesRoute
   '/dashboard': typeof DashboardIndexRoute
   '/expenses': typeof ExpensesIndexRoute
   '/reports': typeof ReportsIndexRoute
+  '/expenses/add': typeof ExpensesAddIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/expenses': typeof ExpensesRouteWithChildren
-  '/expenses/$expenses': typeof ExpensesExpensesRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/expenses/': typeof ExpensesIndexRoute
   '/reports/': typeof ReportsIndexRoute
+  '/expenses/add/': typeof ExpensesAddIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -153,20 +153,20 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/expenses'
-    | '/expenses/$expenses'
     | '/dashboard'
     | '/expenses/'
     | '/reports'
+    | '/expenses/add'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/expenses/$expenses' | '/dashboard' | '/expenses' | '/reports'
+  to: '/' | '/dashboard' | '/expenses' | '/reports' | '/expenses/add'
   id:
     | '__root__'
     | '/'
     | '/expenses'
-    | '/expenses/$expenses'
     | '/dashboard/'
     | '/expenses/'
     | '/reports/'
+    | '/expenses/add/'
   fileRoutesById: FileRoutesById
 }
 
@@ -206,13 +206,9 @@ export const routeTree = rootRoute
     "/expenses": {
       "filePath": "expenses.tsx",
       "children": [
-        "/expenses/$expenses",
-        "/expenses/"
+        "/expenses/",
+        "/expenses/add/"
       ]
-    },
-    "/expenses/$expenses": {
-      "filePath": "expenses/$expenses.tsx",
-      "parent": "/expenses"
     },
     "/dashboard/": {
       "filePath": "dashboard/index.tsx"
@@ -223,6 +219,10 @@ export const routeTree = rootRoute
     },
     "/reports/": {
       "filePath": "reports/index.tsx"
+    },
+    "/expenses/add/": {
+      "filePath": "expenses/add/index.tsx",
+      "parent": "/expenses"
     }
   }
 }
