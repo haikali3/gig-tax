@@ -21,6 +21,7 @@
     "@radix-ui/react-tabs": "^1.1.11",
     "@radix-ui/react-tooltip": "^1.2.6",
     "@tailwindcss/vite": "^4.0.6",
+    "@tanstack/react-query": "^5.76.1",
     "@tanstack/react-router": "^1.114.3",
     "@tanstack/react-router-devtools": "^1.114.3",
     "@tanstack/router-plugin": "^1.114.3",
