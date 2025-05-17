@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import { Menu, X } from 'lucide-react'
+import { Typography } from '@/components/typography'
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -14,47 +15,46 @@ const Navbar = () => {
     <nav className="bg-white border-b border-gray-200 fixed w-full z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          <div className="flex">
-            <div className="flex-shrink-0 flex items-center">
-              <Link to="/" className="flex items-center">
-                <div className="h-8 w-10 rounded-md flex items-center justify-center mr-2">
-                  <img
-                    src="/assets/cuk-ai.png"
-                    alt="cuk.ai logo"
-                    className="h-10 w-10 rounded-md object-contain bg-white"
-                  />
-                </div>
-                <span className="text-xl font-bold text-gray-800">Cuk.ai</span>
-              </Link>
-            </div>
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              <Link
-                to="/dashboard"
-                className="border-transparent text-gray-500 hover:border-brand-500 hover:text-brand-500 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+          <div className="flex items-center">
+            <Link to="/" className="flex items-center">
+              <div className="h-8 w-10 rounded-md flex items-center justify-center mr-2">
+                <img
+                  src="/assets/cuk-ai.png"
+                  alt="cuk.ai logo"
+                  className="rounded-md object-contain bg-white"
+                />
+              </div>
+              <Typography
+                variant="h4"
+                fontClass="satoshi"
+                className="ml-2 font-bold"
+                style={{ color: '#5E19D3' }}
               >
-                Dashboard
-              </Link>
-              <Link
-                to="/expenses"
-                className="border-transparent text-gray-500 hover:border-brand-500 hover:text-brand-500 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-              >
-                Expenses
-              </Link>
-              <Link
-                to="/reports"
-                className="border-transparent text-gray-500 hover:border-brand-500 hover:text-brand-500 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-              >
-                Reports
-              </Link>
-            </div>
+                cuk.ai
+              </Typography>
+            </Link>
           </div>
 
-          {/* <div className="hidden sm:ml-6 sm:flex sm:items-center">
-            <Button variant="outline" className="mr-2">
-              Login
-            </Button>
-            <Button className="bg-brand-400 hover:bg-brand-500">Sign Up</Button>
-          </div> */}
+          <div className="hidden sm:flex sm:items-center sm:space-x-8 ml-auto">
+            <Link
+              to="/dashboard"
+              className="border-transparent text-gray-500 hover:border-brand-500 hover:text-brand-500 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+            >
+              Dashboard
+            </Link>
+            <Link
+              to="/expenses"
+              className="border-transparent text-gray-500 hover:border-brand-500 hover:text-brand-500 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+            >
+              Expenses
+            </Link>
+            <Link
+              to="/reports"
+              className="border-transparent text-gray-500 hover:border-brand-500 hover:text-brand-500 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+            >
+              Reports
+            </Link>
+          </div>
 
           <div className="-mr-2 flex items-center sm:hidden">
             <Button

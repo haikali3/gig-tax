@@ -2,18 +2,17 @@ import { Link } from '@tanstack/react-router'
 import { Container } from './container'
 import { Typography } from './typography'
 import { Button } from './ui/button'
+import { Badge } from '@/components/ui/badge'
 
 export default function LandingPage() {
   return (
     <Container>
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br relative overflow-hidden">
         {/* Autonomous tax & expense management badge */}
-        <div className="flex items-center space-x-2 bg-white/80 border border-gray-200 rounded-full px-4 py-1 shadow-sm backdrop-blur z-10">
-          <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-          <span className="text-sm font-medium text-gray-700">
-            Autonomous tax & expense management
-          </span>
-        </div>
+        <Badge variant="purple" className="ml-4 hidden md:inline-flex">
+          <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></span>
+          Autonomous tax & expense management
+        </Badge>
 
         {/* Headline */}
         <div className="flex flex-col items-center justify-center text-center px-4 mt-10">
@@ -62,13 +61,13 @@ export default function LandingPage() {
             Integrates with your favorite tools
           </span>
           <div className="flex space-x-6 text-gray-300 font-medium text-base">
-            <span className="text-gray-400">GitHub</span>
-            <span className="text-gray-400">PostgreSQL</span>
-            <span className="text-gray-400">Sentry</span>
-            <span className="text-gray-400">Linear</span>
-            <span className="text-gray-400">AWS</span>
-            <span className="text-gray-400">Jira</span>
-            <span className="text-gray-400">Datadog</span>
+            <span className="text-gray-400">QuickBooks</span>
+            <span className="text-gray-400">Stripe</span>
+            <span className="text-gray-400">PayPal</span>
+            <span className="text-gray-400">Notion</span>
+            <span className="text-gray-400">Google Drive</span>
+            <span className="text-gray-400">Slack</span>
+            <span className="text-gray-400">Trello</span>
           </div>
         </div>
       </div>
