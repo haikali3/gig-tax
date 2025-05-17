@@ -17,8 +17,10 @@ const Navbar = () => {
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
               <Link to="/" className="flex items-center">
-                <div className="h-8 w-8 bg-brand-400 rounded-md flex items-center justify-center mr-2">
-                  <span className="text-white font-bold text-lg">F</span>
+                <div className="h-8 w-10 rounded-md flex items-center justify-center mr-2">
+                  <span className="text-white font-bold text-lg bg-purple-400 rounded-md py-1 px-3">
+                    F
+                  </span>
                 </div>
                 <span className="text-xl font-bold text-gray-800">FreeTax</span>
               </Link>
@@ -45,12 +47,12 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className="hidden sm:ml-6 sm:flex sm:items-center">
+          {/* <div className="hidden sm:ml-6 sm:flex sm:items-center">
             <Button variant="outline" className="mr-2">
               Login
             </Button>
             <Button className="bg-brand-400 hover:bg-brand-500">Sign Up</Button>
-          </div>
+          </div> */}
 
           <div className="-mr-2 flex items-center sm:hidden">
             <Button
