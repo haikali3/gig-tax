@@ -80,17 +80,30 @@ const AddExpense = () => {
       setReceipt(file)
       uploadFile(file, {
         onSuccess: (response) => {
-          console.log('Upload response:', response)
+          console.log('Full upload response:', response)
           const data = response.data
+          console.log('Response data:', data)
+
           if (data) {
+            console.log('Setting form data with:', {
+              merchant: data.name,
+              amount: data.total_amount,
+              category: data.category,
+              notes: data.description,
+            })
+
             // Update form with receipt data
-            setFormData((prev) => ({
-              ...prev,
-              merchant: data.name || '',
-              amount: data.total_amount?.toString() || '',
-              category: data.category || '',
-              notes: data.description || '',
-            }))
+            setFormData((prev) => {
+              const newData = {
+                ...prev,
+                merchant: data.name || '',
+                amount: data.total_amount?.toString() || '',
+                category: data.category || '',
+                notes: data.description || '',
+              }
+              console.log('New form data:', newData)
+              return newData
+            })
 
             // Update date if available
             if (data.date) {
@@ -110,6 +123,8 @@ const AddExpense = () => {
               title: 'Receipt Processed',
               description: 'Form has been populated with receipt data.',
             })
+          } else {
+            console.log('No data in response')
           }
         },
       })
@@ -126,17 +141,30 @@ const AddExpense = () => {
       setReceipt(file)
       uploadFile(file, {
         onSuccess: (response) => {
-          console.log('Upload response:', response)
+          console.log('Full upload response:', response)
           const data = response.data
+          console.log('Response data:', data)
+
           if (data) {
+            console.log('Setting form data with:', {
+              merchant: data.name,
+              amount: data.total_amount,
+              category: data.category,
+              notes: data.description,
+            })
+
             // Update form with receipt data
-            setFormData((prev) => ({
-              ...prev,
-              merchant: data.name || '',
-              amount: data.total_amount?.toString() || '',
-              category: data.category || '',
-              notes: data.description || '',
-            }))
+            setFormData((prev) => {
+              const newData = {
+                ...prev,
+                merchant: data.name || '',
+                amount: data.total_amount?.toString() || '',
+                category: data.category || '',
+                notes: data.description || '',
+              }
+              console.log('New form data:', newData)
+              return newData
+            })
 
             // Update date if available
             if (data.date) {
@@ -156,6 +184,8 @@ const AddExpense = () => {
               title: 'Receipt Processed',
               description: 'Form has been populated with receipt data.',
             })
+          } else {
+            console.log('No data in response')
           }
         },
       })

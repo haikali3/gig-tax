@@ -58,16 +58,7 @@ export const useFileUpload = () => {
 
   return useMutation({
     mutationFn: async (file: File): Promise<FileUploadResponse> => {
-      console.log('Starting file upload:', {
-        fileName: file.name,
-        fileSize: file.size,
-        fileType: file.type,
-      })
-
-      // Validate file before upload
-      validateFile(file)
-      
-      // Convert file to ArrayBuffer
+      console.log('Starting file upload for:', file.name)
       const arrayBuffer = await file.arrayBuffer()
       
       console.log('Sending request to:', 'http://47.250.119.191/extract')
@@ -87,30 +78,17 @@ export const useFileUpload = () => {
           status: response.status,
           statusText: response.statusText,
           errorData,
-          headers: Object.fromEntries(response.headers.entries()),
-        })
-        
-        // Handle specific error cases
-        if (errorData?.error?.code === 'InvalidParameter.DataInspection') {
-          toast({
-            title: 'Unsupported File Format',
-            description: 'The file format is not supported. Please upload a JPG, PNG, or PDF file.',
-            variant: 'destructive',
-          })
-          throw new Error('The file format is not supported. Please upload a JPG, PNG, or PDF file.')
-        }
-        
-        toast({
-          title: 'Upload Failed',
-          description: 'Upload failed. Please try again.',
-          variant: 'destructive',
         })
         throw new Error('Upload failed. Please try again.')
       }
       
       const data = await response.json()
-      console.log('Upload successful, response data:', data)
-      return data
+      console.log('Received response:', data)
+      
+      return {
+        success: true,
+        data: data
+      }
     },
     onSuccess: (data) => {
       console.log('Mutation successful:', data)
