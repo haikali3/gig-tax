@@ -35,6 +35,7 @@ import {
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import { useToast } from '@/hooks/use-toast'
+import { Typography } from '@/components/typography'
 
 const AddExpense = () => {
   const navigate = useNavigate()
@@ -116,8 +117,12 @@ const AddExpense = () => {
       </Button>
 
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Add Expense</h1>
-        <p className="text-gray-500 mt-1">Record a new business expense</p>
+        <Typography variant="h1" className="text-3xl font-bold text-gray-900">
+          Add Expense
+        </Typography>
+        <Typography variant="p" className="text-gray-500 mt-1">
+          Record a new business expense
+        </Typography>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -227,10 +232,12 @@ const AddExpense = () => {
         <div>
           <Card>
             <CardHeader>
-              <CardTitle>Attach Receipt</CardTitle>
-              <CardDescription>
+              <Typography variant="h3" className="font-medium mb-2">
+                Attach Receipt
+              </Typography>
+              <Typography variant="p" className="text-gray-500">
                 Upload a photo of your receipt for your records
-              </CardDescription>
+              </Typography>
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="upload">
@@ -271,14 +278,17 @@ const AddExpense = () => {
                     />
                     <div className="flex flex-col items-center">
                       <Receipt className="h-10 w-10 text-gray-400 mb-2" />
-                      <div className="text-sm font-medium">
+                      <Typography variant="p" className="font-bold">
                         {receipt
                           ? receipt.name
                           : 'Drop receipt here or click to upload'}
-                      </div>
-                      <p className="text-xs text-gray-500 mt-1">
+                      </Typography>
+                      <Typography
+                        variant="small"
+                        className="text-gray-500 mt-1"
+                      >
                         Supports JPG, PNG, PDF up to 10MB
-                      </p>
+                      </Typography>
                     </div>
                   </div>
                   <div className="flex items-center justify-between text-sm text-gray-500">
@@ -291,19 +301,24 @@ const AddExpense = () => {
                 <TabsContent value="camera">
                   <div className="flex flex-col items-center justify-center h-56 border rounded-lg bg-gray-50 text-center p-4">
                     <Camera className="h-10 w-10 text-gray-400 mb-2" />
-                    <p className="font-medium text-gray-500">
+                    <Typography
+                      variant="large"
+                      className="font-medium text-gray-500"
+                    >
                       Camera capture coming soon
-                    </p>
-                    <p className="text-xs text-gray-500 mt-1">
+                    </Typography>
+                    <Typography variant="small" className="text-gray-500 mt-1">
                       This feature will let you take pictures of receipts
                       directly
-                    </p>
+                    </Typography>
                   </div>
                 </TabsContent>
               </Tabs>
 
               <div className="mt-6">
-                <h3 className="font-medium mb-2">Tips for better results</h3>
+                <Typography variant="h4" className="font-medium mb-2">
+                  Tips for better results
+                </Typography>
                 <ul className="text-sm text-gray-500 space-y-1">
                   <li>• Make sure the receipt is on a flat surface</li>
                   <li>• Ensure all text is visible and readable</li>
