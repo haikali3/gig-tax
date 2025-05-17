@@ -34,6 +34,14 @@ import { useToast } from '@/hooks/use-toast'
 // Mock data
 const expenses = [
   {
+    id: '0',
+    date: '2021-12-06',
+    merchant: 'food panda',
+    category: 'Meals',
+    amount: 86.99,
+    status: 'Processed',
+  },
+  {
     id: '1',
     date: '2025-05-15',
     merchant: 'Adobe Creative Cloud',
