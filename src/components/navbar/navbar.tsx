@@ -18,11 +18,13 @@ const Navbar = () => {
             <div className="flex-shrink-0 flex items-center">
               <Link to="/" className="flex items-center">
                 <div className="h-8 w-10 rounded-md flex items-center justify-center mr-2">
-                  <span className="text-white font-bold text-lg bg-purple-400 rounded-md py-1 px-3">
-                    F
-                  </span>
+                  <img
+                    src="/assets/cuk-ai.png"
+                    alt="cuk.ai logo"
+                    className="h-10 w-10 rounded-md object-contain bg-white"
+                  />
                 </div>
-                <span className="text-xl font-bold text-gray-800">FreeTax</span>
+                <span className="text-xl font-bold text-gray-800">Cuk.ai</span>
               </Link>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
