@@ -83,7 +83,7 @@ const Dashboard = () => {
             <Calendar className="h-4 w-4 mr-2" />
             May 2025
           </Button>
-          <Link to="/expenses/add">
+          <Link to="/expenses/add-expenses">
             <Button>
               <Upload className="h-4 w-4 mr-2" />
               Add Expense

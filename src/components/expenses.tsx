@@ -369,7 +369,7 @@ const Expenses = () => {
                         <TableCell colSpan={6} className="text-center py-6">
                           <div className="text-gray-500">No expenses found</div>
                           <Button className="mt-2" asChild>
-                            <Link to="/expenses/add">
+                            <Link to="/expenses/add-expenses">
                               Add Your First Expense
                             </Link>
                           </Button>
