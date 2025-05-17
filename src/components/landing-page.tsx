@@ -24,7 +24,11 @@ export default function LandingPage() {
             Take control of your freelance taxes
             <span className="text-shine italic"> effortlessly.</span>
           </Typography>
-          <Typography variant="lead" fontClass="satoshi" className="mt-4">
+          <Typography
+            variant="lead"
+            fontClass="satoshi"
+            className="mt-4 mb-10 !text-gray-500"
+          >
             Say goodbye to spreadsheet chaos and lost receipts. Our platform
             keeps your freelance finances organized, your deductions maximized,
             and your tax season stress-free so you can focus on what inspires
