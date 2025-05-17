@@ -106,6 +106,7 @@ const AddExpense = () => {
             setDate={setDate}
             onSubmit={handleSubmit}
             onCancel={() => navigate({ to: '/expenses' })}
+            isProcessing={isPending}
           />
         </div>
 

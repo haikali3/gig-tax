@@ -2,15 +2,25 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Receipt, Upload, Camera } from 'lucide-react'
+import {
+  Receipt,
+  Upload,
+  Camera,
+  Loader2,
+  CheckCircle2,
+  XCircle,
+} from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useToast } from '@/hooks/use-toast'
 import { Typography } from '@/components/typography'
+import { Progress } from '@/components/ui/progress'
 
 interface ReceiptUploaderProps {
   onUpload: (file: File) => void
   isPending: boolean
 }
+
+type UploadStatus = 'idle' | 'uploading' | 'processing' | 'success' | 'error'
 
 export const ReceiptUploader = ({
   onUpload,
@@ -19,6 +29,8 @@ export const ReceiptUploader = ({
   const [isDragging, setIsDragging] = useState(false)
   const [receipt, setReceipt] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [uploadStatus, setUploadStatus] = useState<UploadStatus>('idle')
+  const [uploadProgress, setUploadProgress] = useState(0)
   const { toast } = useToast()
 
   const createImagePreview = (file: File) => {
@@ -29,14 +41,37 @@ export const ReceiptUploader = ({
     reader.readAsDataURL(file)
   }
 
+  const simulateUploadProgress = () => {
+    setUploadProgress(0)
+    const interval = setInterval(() => {
+      setUploadProgress((prev) => {
+        if (prev >= 90) {
+          clearInterval(interval)
+          return 90
+        }
+        return prev + 10
+      })
+    }, 200)
+    return interval
+  }
+
   const handleFileUpload = (file: File) => {
     setReceipt(file)
     createImagePreview(file)
-    onUpload(file)
-    toast({
-      title: 'Receipt Uploaded',
-      description: `File "${file.name}" has been uploaded.`,
-    })
+    setUploadStatus('uploading')
+    const progressInterval = simulateUploadProgress()
+
+    // Simulate upload completion
+    setTimeout(() => {
+      clearInterval(progressInterval)
+      setUploadProgress(100)
+      setUploadStatus('processing')
+      onUpload(file)
+      toast({
+        title: 'Receipt Uploaded',
+        description: `File "${file.name}" has been uploaded.`,
+      })
+    }, 10)
   }
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -51,6 +86,40 @@ export const ReceiptUploader = ({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       handleFileUpload(e.target.files[0])
+    }
+  }
+
+  const getStatusIcon = () => {
+    switch (uploadStatus) {
+      case 'uploading':
+        return <Loader2 className="h-5 w-5 animate-spin text-brand-500" />
+      case 'processing':
+        return <Loader2 className="h-5 w-5 animate-spin text-brand-500" />
+      case 'success':
+        return <CheckCircle2 className="h-5 w-5 text-green-500" />
+      case 'error':
+        return <XCircle className="h-5 w-5 text-red-500" />
+      default:
+        return null
+    }
+  }
+
+  const getStatusText = () => {
+    if (!isPending && uploadStatus === 'processing') {
+      setUploadStatus('success')
+    }
+
+    switch (uploadStatus) {
+      case 'uploading':
+        return 'Uploading receipt...'
+      case 'processing':
+        return 'Processing receipt...'
+      case 'success':
+        return 'Receipt processed successfully'
+      case 'error':
+        return 'Error processing receipt'
+      default:
+        return 'Drop receipt here or click to upload'
     }
   }
 
@@ -84,9 +153,13 @@ export const ReceiptUploader = ({
           <TabsContent value="upload" className="space-y-4">
             <div
               className={cn(
-                'receipt-drop-area border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50',
-                isDragging && 'active',
-                isPending && 'opacity-50 cursor-not-allowed',
+                'receipt-drop-area border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 transition-all duration-200',
+                isDragging && 'active border-brand-500 bg-brand-50',
+                (uploadStatus === 'uploading' ||
+                  uploadStatus === 'processing') &&
+                  'opacity-50 cursor-not-allowed',
+                uploadStatus === 'success' && 'border-green-500 bg-green-50',
+                uploadStatus === 'error' && 'border-red-500 bg-red-50',
               )}
               onDragOver={(e) => {
                 e.preventDefault()
@@ -102,42 +175,58 @@ export const ReceiptUploader = ({
                 className="hidden"
                 accept="image/*"
                 onChange={handleFileChange}
-                disabled={isPending}
+                disabled={
+                  uploadStatus === 'uploading' || uploadStatus === 'processing'
+                }
               />
               <div className="flex flex-col items-center">
                 {imagePreview ? (
-                  <>
-                    <div className="relative w-full">
-                      <img
-                        src={imagePreview}
-                        alt="Receipt preview"
-                        className="w-full h-48 object-contain rounded-lg mb-4"
-                      />
-                    </div>
-                    <div className="relative w-full">
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        // className="absolute top-2 right-2"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          setImagePreview(null)
-                          setReceipt(null)
-                        }}
-                      >
-                        Remove
-                      </Button>
-                    </div>
-                  </>
+                  <div className="relative w-full">
+                    <img
+                      src={imagePreview}
+                      alt="Receipt preview"
+                      className="w-full h-48 object-contain rounded-lg mb-4"
+                    />
+                    {(uploadStatus === 'uploading' ||
+                      uploadStatus === 'processing') && (
+                      <div className="absolute inset-0 bg-black/10 rounded-lg flex items-center justify-center">
+                        <div className="bg-white p-4 rounded-lg shadow-lg">
+                          <div className="flex items-center gap-2 mb-2">
+                            {getStatusIcon()}
+                            <span className="text-sm font-medium">
+                              {getStatusText()}
+                            </span>
+                          </div>
+                          <Progress
+                            value={uploadProgress}
+                            className="w-[200px]"
+                          />
+                        </div>
+                      </div>
+                    )}
+                    {uploadStatus !== 'uploading' &&
+                      uploadStatus !== 'processing' && (
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          className="absolute top-2 right-2"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setImagePreview(null)
+                            setReceipt(null)
+                            setUploadStatus('idle')
+                            setUploadProgress(0)
+                          }}
+                        >
+                          Remove
+                        </Button>
+                      )}
+                  </div>
                 ) : (
                   <>
                     <Receipt className="h-10 w-10 text-gray-400 mb-2" />
                     <Typography variant="p" className="font-bold">
-                      {isPending
-                        ? 'Processing receipt...'
-                        : receipt
-                          ? receipt.name
-                          : 'Drop receipt here or click to upload'}
+                      {getStatusText()}
                     </Typography>
                     <Typography variant="small" className="text-gray-500 mt-1">
                       Supports JPG, PNG, PDF up to 10MB
