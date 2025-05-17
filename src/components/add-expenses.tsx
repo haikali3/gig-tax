@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
+import { useFileUpload } from '@/hooks/queries/use-file-upload'
 import {
   Card,
   CardContent,
@@ -43,6 +44,12 @@ const AddExpense = () => {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [isDragging, setIsDragging] = useState(false)
   const [receipt, setReceipt] = useState<File | null>(null)
+
+  const uploadMutation = useFileUpload()
+
+  const handleFileUpload = (file: File) => {
+    uploadMutation.mutate(file)
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -274,7 +281,12 @@ const AddExpense = () => {
                       id="receipt-upload"
                       className="hidden"
                       accept="image/*"
-                      onChange={handleFileChange}
+                      onChange={(e) => {
+                        handleFileChange(e)
+                        if (e.target.files && e.target.files[0]) {
+                          handleFileUpload(e.target.files[0])
+                        }
+                      }}
                     />
                     <div className="flex flex-col items-center">
                       <Receipt className="h-10 w-10 text-gray-400 mb-2" />
