@@ -61,30 +61,38 @@ export const ExpenseForm = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="date">Date</Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={cn(
-                        'w-full justify-start text-left font-normal',
-                        isProcessing && 'opacity-50 cursor-not-allowed',
-                      )}
-                      disabled={isProcessing}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? format(date, 'PPP') : <span>Pick a date</span>}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={setDate}
-                      initialFocus
-                      disabled={isProcessing}
-                    />
-                  </PopoverContent>
-                </Popover>
+                <div className="relative">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          'w-full justify-start text-left font-normal',
+                          isProcessing && 'opacity-50 cursor-not-allowed',
+                        )}
+                        disabled={isProcessing}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {date ? format(date, 'PPP') : <span>Pick a date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        initialFocus
+                        disabled={isProcessing}
+                        className={cn(isProcessing && 'opacity-50')}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  {isProcessing && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-white/50">
+                      <Loader2 className="h-4 w-4 animate-spin text-brand-500" />
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="space-y-2">

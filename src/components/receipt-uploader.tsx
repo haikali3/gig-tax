@@ -43,15 +43,16 @@ export const ReceiptUploader = ({
 
   const simulateUploadProgress = () => {
     setUploadProgress(0)
+    let progress = 0
     const interval = setInterval(() => {
-      setUploadProgress((prev) => {
-        if (prev >= 90) {
-          clearInterval(interval)
-          return 90
-        }
-        return prev + 10
-      })
-    }, 200)
+      progress += 5
+      if (progress >= 90) {
+        clearInterval(interval)
+        setUploadProgress(90)
+      } else {
+        setUploadProgress(progress)
+      }
+    }, 100)
     return interval
   }
 
@@ -71,7 +72,7 @@ export const ReceiptUploader = ({
         title: 'Receipt Uploaded',
         description: `File "${file.name}" has been uploaded.`,
       })
-    }, 10)
+    }, 2000) // Increased to 2 seconds to show progress
   }
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
