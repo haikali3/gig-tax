@@ -44,6 +44,7 @@ const AddExpense = () => {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [isDragging, setIsDragging] = useState(false)
   const [receipt, setReceipt] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     merchant: '',
     amount: '',
@@ -52,6 +53,14 @@ const AddExpense = () => {
   })
 
   const { mutate: uploadFile, isPending } = useFileUpload()
+
+  const createImagePreview = (file: File) => {
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      setImagePreview(reader.result as string)
+    }
+    reader.readAsDataURL(file)
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -78,6 +87,7 @@ const AddExpense = () => {
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       const file = e.dataTransfer.files[0]
       setReceipt(file)
+      createImagePreview(file)
       uploadFile(file, {
         onSuccess: (response) => {
           console.log('Full upload response:', response)
@@ -139,6 +149,7 @@ const AddExpense = () => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0]
       setReceipt(file)
+      createImagePreview(file)
       uploadFile(file, {
         onSuccess: (response) => {
           console.log('Full upload response:', response)
@@ -413,20 +424,44 @@ const AddExpense = () => {
                       disabled={isPending}
                     />
                     <div className="flex flex-col items-center">
-                      <Receipt className="h-10 w-10 text-gray-400 mb-2" />
-                      <Typography variant="p" className="font-bold">
-                        {isPending
-                          ? 'Processing receipt...'
-                          : receipt
-                            ? receipt.name
-                            : 'Drop receipt here or click to upload'}
-                      </Typography>
-                      <Typography
-                        variant="small"
-                        className="text-gray-500 mt-1"
-                      >
-                        Supports JPG, PNG, PDF up to 10MB
-                      </Typography>
+                      {imagePreview ? (
+                        <div className="relative w-full">
+                          <img
+                            src={imagePreview}
+                            alt="Receipt preview"
+                            className="w-full h-48 object-contain rounded-lg mb-4"
+                          />
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            // className="absolute top-2 right-2"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setImagePreview(null)
+                              setReceipt(null)
+                            }}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      ) : (
+                        <>
+                          <Receipt className="h-10 w-10 text-gray-400 mb-2" />
+                          <Typography variant="p" className="font-bold">
+                            {isPending
+                              ? 'Processing receipt...'
+                              : receipt
+                                ? receipt.name
+                                : 'Drop receipt here or click to upload'}
+                          </Typography>
+                          <Typography
+                            variant="small"
+                            className="text-gray-500 mt-1"
+                          >
+                            Supports JPG, PNG, PDF up to 10MB
+                          </Typography>
+                        </>
+                      )}
                     </div>
                   </div>
                   <div className="flex items-center justify-between text-sm text-gray-500">
