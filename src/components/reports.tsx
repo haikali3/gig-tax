@@ -30,6 +30,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { Typography } from '@/components/typography'
 
 const Reports = () => {
   const { toast } = useToast()
@@ -86,27 +87,47 @@ const Reports = () => {
     <div className="container mx-auto px-4 py-24">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Reports</h1>
-          <p className="text-gray-500 mt-1">
+          <Typography
+            variant="h1"
+            fontClass="instrument-serif"
+            className="text-3xl font-bold text-gray-900"
+          >
+            Reports
+          </Typography>
+          <Typography
+            variant="lead"
+            fontClass="satoshi"
+            className="mt-1 !text-gray-500"
+          >
             Generate and download tax-ready reports
-          </p>
+          </Typography>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle>Generate Report</CardTitle>
-            <CardDescription>
+            <Typography
+              variant="h4"
+              fontClass="satoshi"
+              className="text-lg font-medium text-gray-700"
+            >
+              Generate Report
+            </Typography>
+            <Typography variant="muted" fontClass="satoshi">
               Create a tax-ready report of your business expenses
-            </CardDescription>
+            </Typography>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div>
-                <label className="text-sm font-medium mb-2 block">
+                <Typography
+                  variant="small"
+                  fontClass="satoshi"
+                  className="font-medium mb-2 block"
+                >
                   Report Type
-                </label>
+                </Typography>
                 <Select value={reportType} onValueChange={setReportType}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select report type" />
@@ -120,7 +141,13 @@ const Reports = () => {
               </div>
 
               <div>
-                <label className="text-sm font-medium mb-2 block">Year</label>
+                <Typography
+                  variant="small"
+                  fontClass="satoshi"
+                  className="font-medium mb-2 block"
+                >
+                  Year
+                </Typography>
                 <Select value={selectedYear} onValueChange={setSelectedYear}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select year" />
@@ -133,7 +160,13 @@ const Reports = () => {
               </div>
 
               <div>
-                <label className="text-sm font-medium mb-2 block">Period</label>
+                <Typography
+                  variant="small"
+                  fontClass="satoshi"
+                  className="font-medium mb-2 block"
+                >
+                  Period
+                </Typography>
                 <Select
                   value={selectedQuarter}
                   onValueChange={setSelectedQuarter}
@@ -171,10 +204,20 @@ const Reports = () => {
                 <div className="mt-4 border rounded-lg p-6">
                   <div className="flex justify-between items-center border-b pb-4 mb-4">
                     <div>
-                      <h3 className="font-bold text-lg">Expense Summary</h3>
-                      <p className="text-sm text-gray-500">
+                      <Typography
+                        variant="h4"
+                        fontClass="satoshi"
+                        className=" text-lg"
+                      >
+                        Expense Summary
+                      </Typography>
+                      <Typography
+                        variant="small"
+                        fontClass="satoshi"
+                        className="text-gray-500"
+                      >
                         {selectedQuarter} {selectedYear}
-                      </p>
+                      </Typography>
                     </div>
                     <Button variant="outline" onClick={handleDownload}>
                       <Download className="h-4 w-4 mr-2" />
@@ -184,9 +227,13 @@ const Reports = () => {
 
                   {reportType === 'schedule-c' ? (
                     <div className="space-y-4">
-                      <h4 className="font-medium">
+                      <Typography
+                        variant="h4"
+                        fontClass="satoshi"
+                        className="font-medium"
+                      >
                         Schedule C - Profit or Loss From Business
-                      </h4>
+                      </Typography>
 
                       <div className="space-y-2">
                         {scheduleC.map((item) => (
@@ -194,40 +241,82 @@ const Reports = () => {
                             key={item.label}
                             className="flex justify-between py-1 border-b border-gray-100"
                           >
-                            <span className="text-sm">{item.label}</span>
-                            <span className="text-sm font-medium">
+                            <Typography variant="small" fontClass="satoshi">
+                              {item.label}
+                            </Typography>
+                            <Typography
+                              variant="small"
+                              fontClass="satoshi"
+                              className="font-medium"
+                            >
                               ${item.amount.toFixed(2)}
-                            </span>
+                            </Typography>
                           </div>
                         ))}
                       </div>
 
-                      <div className="flex justify-between pt-2 font-bold">
-                        <span>Total Expenses</span>
-                        <span>${totalScheduleC.toFixed(2)}</span>
+                      <div className="flex justify-between pt-2">
+                        <Typography
+                          variant="medium"
+                          fontClass="satoshi"
+                          className="font-bold"
+                        >
+                          Total Expenses
+                        </Typography>
+                        <Typography
+                          variant="medium"
+                          fontClass="satoshi"
+                          className="font-bold"
+                        >
+                          ${totalScheduleC.toFixed(2)}
+                        </Typography>
                       </div>
                     </div>
                   ) : (
                     <div className="space-y-4">
                       <div>
-                        <h4 className="font-medium mb-2">Expense Breakdown</h4>
+                        <Typography
+                          variant="h4"
+                          fontClass="satoshi"
+                          className="font-medium mb-2"
+                        >
+                          Expense Breakdown
+                        </Typography>
                         <div className="space-y-2">
                           {categoryTotals.map((item) => (
                             <div
                               key={item.category}
                               className="flex justify-between py-1 border-b border-gray-100"
                             >
-                              <span className="text-sm">{item.category}</span>
-                              <span className="text-sm font-medium">
+                              <Typography variant="small" fontClass="satoshi">
+                                {item.category}
+                              </Typography>
+                              <Typography
+                                variant="small"
+                                fontClass="satoshi"
+                                className="font-medium"
+                              >
                                 ${item.amount.toFixed(2)}
-                              </span>
+                              </Typography>
                             </div>
                           ))}
                         </div>
 
-                        <div className="flex justify-between pt-2 font-bold">
-                          <span>Total Expenses</span>
-                          <span>${totalExpenses.toFixed(2)}</span>
+                        <div className="flex justify-between pt-2">
+                          <Typography
+                            variant="medium"
+                            fontClass="satoshi"
+                            className="font-bold"
+                          >
+                            Total Expenses
+                          </Typography>
+                          <Typography
+                            variant="medium"
+                            fontClass="satoshi"
+                            className="font-bold"
+                          >
+                            ${totalExpenses.toFixed(2)}
+                          </Typography>
                         </div>
                       </div>
 
@@ -235,18 +324,30 @@ const Reports = () => {
                         <div className="flex items-start">
                           <Info className="h-5 w-5 text-brand-500 mt-0.5 mr-2 flex-shrink-0" />
                           <div>
-                            <h4 className="font-medium text-brand-700">
+                            <Typography
+                              variant="h4"
+                              fontClass="satoshi"
+                              className="font-medium text-brand-700"
+                            >
                               Estimated Tax Deduction
-                            </h4>
-                            <p className="text-sm text-brand-600">
+                            </Typography>
+                            <Typography
+                              variant="small"
+                              fontClass="satoshi"
+                              className="text-brand-600"
+                            >
                               Based on your expense categories, approximately $
                               {(totalExpenses * 0.8).toFixed(2)} may be
                               tax-deductible.
-                            </p>
-                            <p className="text-xs text-brand-600 mt-1">
+                            </Typography>
+                            <Typography
+                              variant="small"
+                              fontClass="satoshi"
+                              className="text-brand-600 mt-1"
+                            >
                               * This is an estimate. Consult with a tax
                               professional for personalized advice.
-                            </p>
+                            </Typography>
                           </div>
                         </div>
                       </div>
@@ -261,10 +362,16 @@ const Reports = () => {
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Available Reports</CardTitle>
-              <CardDescription>
+              <Typography
+                variant="h4"
+                fontClass="satoshi"
+                className="text-lg font-medium text-gray-700"
+              >
+                Available Reports
+              </Typography>
+              <Typography variant="muted" fontClass="satoshi">
                 Common reports for freelancers and self-employed
-              </CardDescription>
+              </Typography>
             </CardHeader>
             <CardContent className="space-y-4">
               <div
@@ -275,8 +382,16 @@ const Reports = () => {
                   <div className="flex items-center">
                     <FileText className="h-5 w-5 text-brand-400 mr-2" />
                     <div>
-                      <p className="font-medium">Quarterly Summary</p>
-                      <p className="text-xs text-gray-500">Q2 2025</p>
+                      <Typography variant="medium" fontClass="satoshi">
+                        Quarterly Summary
+                      </Typography>
+                      <Typography
+                        variant="small"
+                        fontClass="satoshi"
+                        className="text-gray-500"
+                      >
+                        Q2 2025
+                      </Typography>
                     </div>
                   </div>
                   <Download className="h-4 w-4 text-gray-500" />
@@ -288,8 +403,16 @@ const Reports = () => {
                   <div className="flex items-center">
                     <FileText className="h-5 w-5 text-brand-400 mr-2" />
                     <div>
-                      <p className="font-medium">Schedule C Report</p>
-                      <p className="text-xs text-gray-500">Not available yet</p>
+                      <Typography variant="medium" fontClass="satoshi">
+                        Schedule C Report
+                      </Typography>
+                      <Typography
+                        variant="small"
+                        fontClass="satoshi"
+                        className="text-gray-500"
+                      >
+                        Not available yet
+                      </Typography>
                     </div>
                   </div>
                   <Download className="h-4 w-4 text-gray-500" />
@@ -301,8 +424,16 @@ const Reports = () => {
                   <div className="flex items-center">
                     <FileText className="h-5 w-5 text-brand-400 mr-2" />
                     <div>
-                      <p className="font-medium">Income & Expenses</p>
-                      <p className="text-xs text-gray-500">Not available yet</p>
+                      <Typography variant="medium" fontClass="satoshi">
+                        Income & Expenses
+                      </Typography>
+                      <Typography
+                        variant="small"
+                        fontClass="satoshi"
+                        className="text-gray-500"
+                      >
+                        Not available yet
+                      </Typography>
                     </div>
                   </div>
                   <Download className="h-4 w-4 text-gray-500" />
@@ -313,74 +444,119 @@ const Reports = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle>Tax Calendar</CardTitle>
+              <Typography
+                variant="h4"
+                fontClass="satoshi"
+                className="text-lg font-medium text-gray-700"
+              >
+                Tax Calendar
+              </Typography>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex justify-between items-center p-3 bg-brand-50 rounded-lg">
                 <div className="flex items-center">
                   <Calendar className="h-5 w-5 text-brand-500 mr-2" />
                   <div>
-                    <p className="font-medium text-brand-700">Q2 Payment Due</p>
-                    <p className="text-xs text-brand-500">
+                    <Typography
+                      variant="medium"
+                      fontClass="satoshi"
+                      className="text-brand-700"
+                    >
+                      Q2 Payment Due
+                    </Typography>
+                    <Typography
+                      variant="small"
+                      fontClass="satoshi"
+                      className="text-brand-500"
+                    >
                       Quarterly Estimated Tax
-                    </p>
+                    </Typography>
                   </div>
                 </div>
-                <div className="font-medium">Jun 15, 2025</div>
+                <Typography variant="medium" fontClass="satoshi">
+                  Jun 15, 2025
+                </Typography>
               </div>
               <div className="flex justify-between items-center p-3 rounded-lg">
                 <div className="flex items-center">
                   <Calendar className="h-5 w-5 text-gray-400 mr-2" />
                   <div>
-                    <p className="font-medium">Q3 Payment Due</p>
-                    <p className="text-xs text-gray-500">
+                    <Typography variant="medium" fontClass="satoshi">
+                      Q3 Payment Due
+                    </Typography>
+                    <Typography
+                      variant="small"
+                      fontClass="satoshi"
+                      className="text-gray-500"
+                    >
                       Quarterly Estimated Tax
-                    </p>
+                    </Typography>
                   </div>
                 </div>
-                <div className="font-medium">Sep 15, 2025</div>
+                <Typography variant="medium" fontClass="satoshi">
+                  Sep 15, 2025
+                </Typography>
               </div>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Common Questions</CardTitle>
+              <Typography
+                variant="h4"
+                fontClass="satoshi"
+                className="text-lg font-medium text-gray-700"
+              >
+                Common Questions
+              </Typography>
             </CardHeader>
             <CardContent>
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="item-1">
                   <AccordionTrigger>
-                    What tax forms do freelancers need?
+                    <Typography variant="medium" fontClass="satoshi">
+                      What tax forms do freelancers need?
+                    </Typography>
                   </AccordionTrigger>
                   <AccordionContent>
-                    Freelancers typically need to file Schedule C (Profit or
-                    Loss from Business) along with their Form 1040. They may
-                    also need Schedule SE for self-employment tax. Quarterly
-                    estimated tax payments should be made using Form 1040-ES.
+                    <Typography variant="small" fontClass="satoshi">
+                      Freelancers typically need to file Schedule C (Profit or
+                      Loss from Business) along with their Form 1040. They may
+                      also need Schedule SE for self-employment tax. Quarterly
+                      estimated tax payments should be made using Form 1040-ES.
+                    </Typography>
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-2">
                   <AccordionTrigger>
-                    How are quarterly taxes calculated?
+                    <Typography variant="medium" fontClass="satoshi">
+                      How are quarterly taxes calculated?
+                    </Typography>
                   </AccordionTrigger>
                   <AccordionContent>
-                    Quarterly taxes are typically calculated based on your
-                    expected annual income, minus deductions, multiplied by your
-                    tax rate. The IRS expects you to pay at least 90% of your
-                    tax liability through quarterly payments to avoid penalties.
+                    <Typography variant="small" fontClass="satoshi">
+                      Quarterly taxes are typically calculated based on your
+                      expected annual income, minus deductions, multiplied by
+                      your tax rate. The IRS expects you to pay at least 90% of
+                      your tax liability through quarterly payments to avoid
+                      penalties.
+                    </Typography>
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-3">
                   <AccordionTrigger>
-                    What expenses are tax deductible?
+                    <Typography variant="medium" fontClass="satoshi">
+                      What expenses are tax deductible?
+                    </Typography>
                   </AccordionTrigger>
                   <AccordionContent>
-                    Business expenses that are ordinary and necessary for your
-                    freelance work are typically deductible. This may include
-                    home office, internet, equipment, software, travel, and
-                    professional development. Always consult a tax professional
-                    for your specific situation.
+                    <Typography variant="small" fontClass="satoshi">
+                      Business expenses that are ordinary and necessary for your
+                      freelance work are typically deductible. This may include
+                      home office, internet, equipment, software, travel, and
+                      professional development. Always consult a tax
+                      professional for your specific situation.
+                    </Typography>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -389,17 +565,25 @@ const Reports = () => {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <p className="text-xs text-gray-500 italic">
+                    <Typography
+                      variant="small"
+                      fontClass="satoshi"
+                      className="text-gray-500 italic"
+                    >
                       * This information is not tax advice. Consult a
                       professional for your specific situation.
-                    </p>
+                    </Typography>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p className="w-80">
+                    <Typography
+                      variant="small"
+                      fontClass="satoshi"
+                      className="w-80"
+                    >
                       The information provided is general in nature and may not
                       apply to your specific circumstances. Always consult with
                       a qualified tax professional before making tax decisions.
-                    </p>
+                    </Typography>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>

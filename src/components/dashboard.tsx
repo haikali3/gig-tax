@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowRight, Upload, Calendar, Download } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { useToast } from '@/hooks/use-toast'
+import { Typography } from '@/components/typography'
 
 // Mock data for visualization
 const expensesByCategory = [
@@ -64,10 +65,20 @@ const Dashboard = () => {
     <div className="container mx-auto px-4 py-24">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-500 mt-1">
+          <Typography
+            variant="h1"
+            fontClass="instrument-serif"
+            className="text-3xl font-bold text-gray-900"
+          >
+            Dashboard
+          </Typography>
+          <Typography
+            variant="lead"
+            fontClass="satoshi"
+            className="mt-1 !text-gray-500"
+          >
             Track and manage your freelance expenses
-          </p>
+          </Typography>
         </div>
         <div className="mt-4 md:mt-0 space-x-2">
           <Button
@@ -95,10 +106,16 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-medium text-gray-700">
+            <Typography
+              variant="h4"
+              fontClass="satoshi"
+              className="text-lg font-medium text-gray-700"
+            >
               Total Expenses
-            </CardTitle>
-            <CardDescription>Current quarter</CardDescription>
+            </Typography>
+            <Typography variant="muted" fontClass="satoshi">
+              Current quarter
+            </Typography>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">
@@ -111,10 +128,16 @@ const Dashboard = () => {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-medium text-gray-700">
+            <Typography
+              variant="h4"
+              fontClass="satoshi"
+              className="text-lg font-medium text-gray-700"
+            >
               Potential Deductions
-            </CardTitle>
-            <CardDescription>Based on categorized expenses</CardDescription>
+            </Typography>
+            <Typography variant="muted" fontClass="satoshi">
+              Based on categorized expenses
+            </Typography>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">
@@ -127,10 +150,16 @@ const Dashboard = () => {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-medium text-gray-700">
+            <Typography
+              variant="h4"
+              fontClass="satoshi"
+              className="text-lg font-medium text-gray-700"
+            >
               Uncategorized
-            </CardTitle>
-            <CardDescription>Expenses needing review</CardDescription>
+            </Typography>
+            <Typography variant="muted" fontClass="satoshi">
+              Expenses needing review
+            </Typography>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">2 Items</div>
@@ -150,7 +179,13 @@ const Dashboard = () => {
         <Card className="lg:col-span-2">
           <CardHeader>
             <div className="flex justify-between items-center">
-              <CardTitle>Expense Breakdown</CardTitle>
+              <Typography
+                variant="h4"
+                fontClass="satoshi"
+                className="text-lg font-medium text-gray-700"
+              >
+                Expense Breakdown
+              </Typography>
               <Tabs
                 defaultValue="quarter"
                 value={period}
@@ -197,7 +232,13 @@ const Dashboard = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Recent Expenses</CardTitle>
+            <Typography
+              variant="h4"
+              fontClass="satoshi"
+              className="text-lg font-medium text-gray-700"
+            >
+              Recent Expenses
+            </Typography>
           </CardHeader>
           <CardContent className="space-y-4">
             {recentExpenses.map((expense) => (
@@ -206,13 +247,17 @@ const Dashboard = () => {
                 className="flex justify-between items-center p-3 rounded-lg hover:bg-gray-50"
               >
                 <div>
-                  <p className="font-medium">{expense.merchant}</p>
-                  <p className="text-xs text-gray-500">
-                    {new Date(expense.date).toLocaleDateString()} Â·{' '}
+                  <Typography variant="medium" fontClass="satoshi">
+                    {expense.merchant}
+                  </Typography>
+                  <Typography variant="small" fontClass="satoshi">
+                    {new Date(expense.date).toLocaleDateString()} ·{' '}
                     {expense.category}
-                  </p>
+                  </Typography>
                 </div>
-                <div className="font-medium">${expense.amount.toFixed(2)}</div>
+                <Typography variant="medium" fontClass="satoshi">
+                  ${expense.amount.toFixed(2)}
+                </Typography>
               </div>
             ))}
             <Button variant="outline" className="w-full mt-2" asChild>
@@ -225,7 +270,13 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
+            <Typography
+              variant="h4"
+              fontClass="satoshi"
+              className="text-lg font-medium text-gray-700"
+            >
+              Quick Actions
+            </Typography>
           </CardHeader>
           <CardContent className="space-y-4">
             <Button
@@ -259,24 +310,52 @@ const Dashboard = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Tax Calendar</CardTitle>
+            <Typography
+              variant="h4"
+              fontClass="satoshi"
+              className="text-lg font-medium text-gray-700"
+            >
+              Tax Calendar
+            </Typography>
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex justify-between items-center p-3 bg-brand-50 rounded-lg">
               <div>
-                <p className="font-medium text-brand-700">
+                <Typography
+                  variant="medium"
+                  fontClass="satoshi"
+                  className="text-brand-700"
+                >
                   Quarterly Estimated Tax
-                </p>
-                <p className="text-xs text-brand-500">Q2 Payment Due</p>
+                </Typography>
+                <Typography
+                  variant="small"
+                  fontClass="satoshi"
+                  className="text-brand-500"
+                >
+                  Q2 Payment Due
+                </Typography>
               </div>
-              <div className="font-medium">Jun 15, 2025</div>
+              <Typography variant="medium" fontClass="satoshi">
+                Jun 15, 2025
+              </Typography>
             </div>
             <div className="flex justify-between items-center p-3 rounded-lg">
               <div>
-                <p className="font-medium">Q3 Payment Due</p>
-                <p className="text-xs text-gray-500">Estimated Tax</p>
+                <Typography variant="medium" fontClass="satoshi">
+                  Q3 Payment Due
+                </Typography>
+                <Typography
+                  variant="small"
+                  fontClass="satoshi"
+                  className="text-gray-500"
+                >
+                  Estimated Tax
+                </Typography>
               </div>
-              <div className="font-medium">Sep 15, 2025</div>
+              <Typography variant="medium" fontClass="satoshi">
+                Sep 15, 2025
+              </Typography>
             </div>
           </CardContent>
         </Card>

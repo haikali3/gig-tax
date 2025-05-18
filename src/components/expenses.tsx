@@ -30,6 +30,7 @@ import {
 } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { useToast } from '@/hooks/use-toast'
+import { Typography } from '@/components/typography'
 
 // Mock data
 const expenses = [
@@ -181,10 +182,20 @@ const Expenses = () => {
     <div className="container mx-auto px-4 py-24">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Expenses</h1>
-          <p className="text-gray-500 mt-1">
+          <Typography
+            variant="h1"
+            fontClass="instrument-serif"
+            className="text-3xl font-bold text-gray-900"
+          >
+            Expenses
+          </Typography>
+          <Typography
+            variant="lead"
+            fontClass="satoshi"
+            className="mt-1 !text-gray-500"
+          >
             Track and manage your business expenses
-          </p>
+          </Typography>
         </div>
         <div className="mt-4 md:mt-0 flex space-x-2">
           <Button
@@ -211,7 +222,13 @@ const Expenses = () => {
 
       <Card className="mb-6">
         <CardHeader className="pb-3">
-          <CardTitle>Filter & Search</CardTitle>
+          <Typography
+            variant="h4"
+            fontClass="satoshi"
+            className="text-lg font-medium text-gray-700"
+          >
+            Filter & Search
+          </Typography>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -301,7 +318,9 @@ const Expenses = () => {
                         onClick={() => toggleSort('date')}
                       >
                         <div className="flex items-center">
-                          Date
+                          <Typography variant="medium" fontClass="satoshi">
+                            Date
+                          </Typography>
                           <ArrowUpDown className="ml-2 h-3 w-3" />
                         </div>
                       </TableHead>
@@ -310,39 +329,73 @@ const Expenses = () => {
                         onClick={() => toggleSort('merchant')}
                       >
                         <div className="flex items-center">
-                          Merchant
+                          <Typography variant="medium" fontClass="satoshi">
+                            Merchant
+                          </Typography>
                           <ArrowUpDown className="ml-2 h-3 w-3" />
                         </div>
                       </TableHead>
-                      <TableHead>Category</TableHead>
+                      <TableHead>
+                        <Typography variant="medium" fontClass="satoshi">
+                          Category
+                        </Typography>
+                      </TableHead>
                       <TableHead
                         className="cursor-pointer hover:bg-gray-50"
                         onClick={() => toggleSort('amount')}
                       >
                         <div className="flex items-center">
-                          Amount
+                          <Typography variant="medium" fontClass="satoshi">
+                            Amount
+                          </Typography>
                           <ArrowUpDown className="ml-2 h-3 w-3" />
                         </div>
                       </TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
+                      <TableHead>
+                        <Typography variant="medium" fontClass="satoshi">
+                          Status
+                        </Typography>
+                      </TableHead>
+                      <TableHead className="text-right">
+                        <Typography variant="medium" fontClass="satoshi">
+                          Actions
+                        </Typography>
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {sortedExpenses.map((expense) => (
                       <TableRow key={expense.id}>
-                        <TableCell className="font-medium">
-                          {new Date(expense.date).toLocaleDateString()}
-                        </TableCell>
-                        <TableCell>{expense.merchant}</TableCell>
                         <TableCell>
-                          {expense.category || (
-                            <span className="text-gray-400 italic">
+                          <Typography variant="medium" fontClass="satoshi">
+                            {new Date(expense.date).toLocaleDateString()}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="medium" fontClass="satoshi">
+                            {expense.merchant}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          {expense.category ? (
+                            <Typography variant="medium" fontClass="satoshi">
+                              {expense.category}
+                            </Typography>
+                          ) : (
+                            <Typography
+                              variant="small"
+                              fontClass="satoshi"
+                              className="text-gray-400 italic"
+                            >
                               Uncategorized
-                            </span>
+                            </Typography>
                           )}
                         </TableCell>
-                        <TableCell>${expense.amount.toFixed(2)}</TableCell>
+                        <TableCell>
+                          <Typography variant="medium" fontClass="satoshi">
+                            ${expense.amount.toFixed(2)}
+                          </Typography>
+                        </TableCell>
                         <TableCell>
                           <Badge className={getStatusColor(expense.status)}>
                             {expense.status}
@@ -355,7 +408,7 @@ const Expenses = () => {
                             className="h-8 w-8"
                             asChild
                           >
-                            <Link to={`/expenses/${expense.id}`}>
+                            <Link to="/expenses">
                               <Edit className="h-4 w-4" />
                               <span className="sr-only">Edit</span>
                             </Link>
@@ -375,7 +428,9 @@ const Expenses = () => {
                     {sortedExpenses.length === 0 && (
                       <TableRow>
                         <TableCell colSpan={6} className="text-center py-6">
-                          <div className="text-gray-500">No expenses found</div>
+                          <Typography variant="muted" fontClass="satoshi">
+                            No expenses found
+                          </Typography>
                           <Button className="mt-2" asChild>
                             <Link to="/expenses/add-expenses">
                               Add Your First Expense
