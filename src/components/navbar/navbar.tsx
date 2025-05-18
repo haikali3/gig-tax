@@ -24,14 +24,7 @@ const Navbar = () => {
                   className="rounded-md object-contain bg-white"
                 />
               </div>
-              {/* <Typography
-                variant="h1"
-                fontClass="satoshi"
-                // className="text-xs font-bold"
-                style={{ color: '#5E19D3' }}
-              >
-                cuk.ai
-              </Typography> */}
+              <span className="text-shine font-satoshi text-2xl">cuk.ai</span>
             </Link>
           </div>
 
