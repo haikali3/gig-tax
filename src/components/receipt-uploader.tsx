@@ -260,11 +260,43 @@ export const ReceiptUploader = ({
           <Typography variant="h4" className="font-medium mb-2">
             Tips for better results
           </Typography>
-          <ul className="text-sm text-gray-500 space-y-1">
-            <li>• Make sure the receipt is on a flat surface</li>
-            <li>• Ensure all text is visible and readable</li>
-            <li>• Avoid shadows and glare on the receipt</li>
-            <li>• Include the total amount and date</li>
+          <ul className="space-y-1">
+            <li>
+              <Typography
+                variant="small"
+                fontClass="satoshi"
+                className="text-gray-500"
+              >
+                • Make sure the receipt is on a flat surface
+              </Typography>
+            </li>
+            <li>
+              <Typography
+                variant="small"
+                fontClass="satoshi"
+                className="text-gray-500"
+              >
+                • Ensure all text is visible and readable
+              </Typography>
+            </li>
+            <li>
+              <Typography
+                variant="small"
+                fontClass="satoshi"
+                className="text-gray-500"
+              >
+                • Avoid shadows and glare on the receipt
+              </Typography>
+            </li>
+            <li>
+              <Typography
+                variant="small"
+                fontClass="satoshi"
+                className="text-gray-500"
+              >
+                • Include the total amount and date
+              </Typography>
+            </li>
           </ul>
         </div>
       </CardContent>
