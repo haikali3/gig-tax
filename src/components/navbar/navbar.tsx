@@ -24,14 +24,14 @@ const Navbar = () => {
                   className="rounded-md object-contain bg-white"
                 />
               </div>
-              <Typography
-                variant="h4"
+              {/* <Typography
+                variant="h1"
                 fontClass="satoshi"
-                className="ml-2 font-bold"
+                // className="text-xs font-bold"
                 style={{ color: '#5E19D3' }}
               >
                 cuk.ai
-              </Typography>
+              </Typography> */}
             </Link>
           </div>
 
